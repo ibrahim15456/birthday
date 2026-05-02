@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Happy Birthday 🎉</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    overflow: hidden;
+    background: url('photo.jpg') no-repeat center/cover;
+}
+
+/* Overlay */
+.overlay {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.25);
+}
+
+/* Intro */
+#intro {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 10;
+}
+
+#intro button {
+    padding: 15px 30px;
+    border-radius: 25px;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+/* Main */
+#main {
+    display: none;
+    position: relative;
+    height: 100vh;
+}
+
+/* Name */
+.name {
+    font-family: 'Playfair Display', serif;
+    font-size: 70px;
+    color: #fff;
+    text-align: center;
+    margin-top: 20px;
+    text-shadow: 0 5px 15px rgba(0,0,0,0.6);
+}
+
+/* Floating */
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+    100% { transform: translateY(0px); }
+}
+
+/* Envelope */
+.envelope {
+    position: absolute;
+    width: 200px;
+    height: 140px;
+    cursor: pointer;
+    animation: float 4s ease-in-out infinite;
+}
+
+.env1 { top: 25%; left: 15%; background: #ffadad; }
+.env2 { top: 20%; right: 15%; background: #ffd6a5; }
+.env3 { bottom: 20%; left: 20%; background: #caffbf; }
+.env4 { bottom: 25%; right: 20%; background: #a0c4ff; }
+
+.envelope::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    clip-path: polygon(0 0, 100% 0, 50% 60%);
+    background: rgba(255,255,255,0.7);
+}
+
+.envelope::after {
+    content: "💌";
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 30px;
+}
+
+/* Popup bg */
+.popup-bg {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.65);
+    top: 0;
+    left: 0;
+    display: none;
+    z-index: 50;
+    backdrop-filter: blur(6px);
+}
+
+.popup-bg.active {
+    display: block;
+}
+
+/* Popup */
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scaleY(0) scaleX(0.8);
+    opacity: 0;
+
+    background: rgba(255,255,255,0.18);
+    backdrop-filter: blur(20px);
+
+    border: 1px solid rgba(255,255,255,0.35);
+
+    padding: 45px;
+    border-radius: 25px;
+
+    width: 480px;
+    max-width: 90%;
+    min-height: 220px;
+
+    text-align: center;
+    color: white;
+
+    font-size: 22px;
+    line-height: 1.6;
+
+    box-shadow: 0 30px 70px rgba(0,0,0,0.6);
+
+    transition: transform 0.6s cubic-bezier(0.25,1.3,0.5,1), opacity 0.4s;
+
+    z-index: 100;
+}
+
+.popup.active {
+    transform: translate(-50%, -50%) scaleY(1) scaleX(1);
+    opacity: 1;
+}
+
+.popup.closing {
+    transform: translate(-50%, -50%) scaleY(0) scaleX(0.8);
+    opacity: 0;
+}
+
+/* ✨ Cursor */
+.cursor {
+    display: inline-block;
+    margin-left: 4px;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0%, 50%, 100% { opacity: 1; }
+    25%, 75% { opacity: 0; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="overlay"></div>
+
+<!-- Intro -->
+<div id="intro">
+    <h1>🎉 A Special Surprise 🎁</h1>
+    <button onclick="start()">Open 💌</button>
+</div>
+
+<!-- Main -->
+<div id="main">
+
+<div class="name" id="name"></div>
+
+<div class="envelope env1" onclick="openMsg(0)"></div>
+<div class="envelope env2" onclick="openMsg(1)"></div>
+<div class="envelope env3" onclick="openMsg(2)"></div>
+<div class="envelope env4" onclick="openMsg(3)"></div>
+
+</div>
+
+<!-- Popup -->
+<div class="popup-bg" id="popupBg" onclick="closeMsg()"></div>
+
+<div class="popup" id="popup">
+    <div id="popupText"></div>
+</div>
+
+<script>
+
+/* Start */
+function start() {
+    document.getElementById("intro").style.display = "none";
+    document.getElementById("main").style.display = "block";
+    typeName();
+}
+
+/* Name typing */
+const nameText = "NOURAN";
+let n = 0;
+
+function typeName() {
+    if (n < nameText.length) {
+        document.getElementById("name").innerHTML += nameText[n];
+        n++;
+        setTimeout(typeName, 120);
+    }
+}
+
+/* Messages */
+const messages = [
+    [
+        "You are one of the kindest and most genuine people I know. I wish you a year full of happiness and success.",
+        "Your heart is pure, and your kindness makes everything around you brighter.",
+        "Every moment with you feels warm and comforting, like everything is exactly where it should be."
+    ],
+    [
+        "Having you in my life is such a blessing. Thank you for being such a wonderful friend.",
+        "I truly appreciate every laugh, every talk, and every memory we share together.",
+        "You make life easier just by being in it, and that means more than you know."
+    ],
+    [
+        "May your birthday be filled with joy, laughter, and unforgettable memories.",
+        "I hope this year brings you closer to everything you dream about.",
+        "You deserve days full of smiles and nights full of peace."
+    ],
+    [
+        "You deserve all the happiness in the world. Stay amazing always.",
+        "Never forget how special and valuable you are to the people around you.",
+        "Keep shining the way you always do, the world needs that light."
+    ]
+];
+
+let currentIndex = [0,0,0,0];
+let typingInterval;
+
+/* Typing + Cursor */
+function typeMessage(text) {
+    let i = 0;
+    const el = document.getElementById("popupText");
+
+    clearInterval(typingInterval);
+
+    el.innerHTML = '<span id="text"></span><span class="cursor">|</span>';
+
+    const textSpan = document.getElementById("text");
+
+    typingInterval = setInterval(() => {
+        textSpan.innerHTML += text[i];
+        i++;
+
+        if (i >= text.length) {
+            clearInterval(typingInterval);
+        }
+    }, 25);
+}
+
+/* Open */
+function openMsg(i) {
+    const popup = document.getElementById("popup");
+
+    popup.classList.remove("closing");
+    popup.classList.add("active");
+
+    const msg = messages[i][currentIndex[i]];
+    typeMessage(msg);
+
+    currentIndex[i] = (currentIndex[i] + 1) % messages[i].length;
+
+    document.getElementById("popupBg").classList.add("active");
+}
+
+/* Close */
+function closeMsg() {
+    const popup = document.getElementById("popup");
+
+    popup.classList.remove("active");
+    popup.classList.add("closing");
+
+    document.getElementById("popupBg").classList.remove("active");
+
+    clearInterval(typingInterval);
+}
+
+</script>
+
+</body>
+</html>
